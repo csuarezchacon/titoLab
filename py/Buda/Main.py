@@ -15,21 +15,20 @@ hstOld.getHistory(False, mkt)
 tkrOld = Ticker()
 tkrOld.getTicker(mkt)
 
-logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | VAL BUY | VAL SELL |" )
+logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | VAL BUY | VAL SELL | BUY | SELL |" )
 
 try:
 	logging.info("| RESUMEN | " +
-		str(hstOld.o[-1]) + " | " +
-		str(hstOld.h[-1]) + " | " +
-		str(hstOld.l[-1]) + " | " +
-		str(hstOld.c[-1]) + " | " +
-		str(tkrOld.last_price[0]) + " | " +
-		str(tkrOld.max_bid[0]) + " | " +
-		str(tkrOld.min_ask[0]) + " |" )
+		str(hstOld.o) + " | " +
+		str(hstOld.h) + " | " +
+		str(hstOld.l) + " | " +
+		str(hstOld.c) + " | " +
+		str(tkrOld.last_price) + " | " +
+		str(tkrOld.max_bid) + " | " +
+		str(tkrOld.min_ask) + " | | |" )
 except:
 	 logging.info("Error inesperado al iniciar valores")
-
-
+	
 while True:
 	try:
 		flgNew = False
@@ -39,19 +38,33 @@ while True:
 		tkrNew = Ticker()
 		tkrNew.getTicker(mkt)
 
-		if ((hstNew.o != 0) and (hstNew.h != 0) and (hstNew.l != 0) and (hstNew.c != 0) and (tkrNew.last_price != ['0.0', 'CLP']) and (tkrNew.max_bid != ['0.0', 'CLP']) and (tkrNew.min_ask != ['0.0', 'CLP'])):
-			if ((hstNew.o != hstOld.o) or (hstNew.h != hstOld.h) or (hstNew.l != hstOld.l) or (hstNew.c != hstOld.c) or (tkrNew.last_price[0] != tkrOld.last_price[0]) or (tkrNew.max_bid[0] != tkrOld.max_bid[0]) or (tkrNew.min_ask[0] != tkrOld.min_ask[0])):
+		if ((hstNew.o != 0) and (hstNew.h != 0) and (hstNew.l != 0) and (hstNew.c != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
+			if ((hstNew.o != hstOld.o) or (hstNew.h != hstOld.h) or (hstNew.l != hstOld.l) or (hstNew.c != hstOld.c) or (tkrNew.last_price != tkrOld.last_price) or (tkrNew.max_bid != tkrOld.max_bid) or (tkrNew.min_ask != tkrOld.min_ask)):
 				flgNew = True
 
 		if flgNew:
+			buyDscAmnt = float(100)
+			buyStat = ""
+			finalMaxBid = float(tkrNew.max_bid) + float(buyDscAmnt)
+			if ((tkrNew.last_price < tkrNew.max_bid) and (finalMaxBid < tkrOld.max_bid)):
+				buyStat = "BUY"
+
+			sellDscAmnt = 100
+			sellStat = ""
+			finalMinAsk = float(tkrOld.min_ask) - float(sellDscAmnt)
+			if ((tkrNew.last_price >= tkrNew.min_ask) and (tkrNew.min_ask > finalMinAsk)):
+				sellStat = "SELL"
+
 			logging.info("| RESUMEN | " +
-				str(hstNew.o[-1]) + " | " +
-				str(hstNew.h[-1]) + " | " +
-				str(hstNew.l[-1]) + " | " +
-				str(hstNew.c[-1]) + " | " +
-				str(tkrNew.last_price[0]) + " | " +
-				str(tkrNew.max_bid[0]) + " | " +
-				str(tkrNew.min_ask[0]) + " |" )
+				str(hstNew.o) + " | " +
+				str(hstNew.h) + " | " +
+				str(hstNew.l) + " | " +
+				str(hstNew.c) + " | " +
+				str(tkrNew.last_price) + " | " +
+				str(tkrNew.max_bid) + " | " +
+				str(tkrNew.min_ask) + " | " +
+				buyStat + " | " +
+				sellStat + " | ")
 
 			hstOld = hstNew
 			tkrOld = tkrNew

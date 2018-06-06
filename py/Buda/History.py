@@ -6,13 +6,13 @@ import time
 from Logger import *
 
 class History():
-	o = [] #Open
-	h = [] #Hight
-	l = [] #Low
-	c = [] #Close
+	o = float(0) #Open
+	h = float(0) #Hight
+	l = float(0) #Low
+	c = float(0) #Close
 	s = ""
-	t = []
-	v = []
+	t = float(0)
+	v = float(0)
 
 	def getHistory(self, first, mkt):
 		try:
@@ -28,12 +28,12 @@ class History():
 			req = requests.get(url)
 			histJson = json.loads(req.text)
 			
-			self.o = histJson['o']
-			self.h = histJson['h']
-			self.l = histJson['l']
-			self.c = histJson['c']
+			self.o = histJson['o'][-1]
+			self.h = histJson['h'][-1]
+			self.l = histJson['l'][-1]
+			self.c = histJson['c'][-1]
 			self.s = histJson['s']
-			self.t = histJson['t']
-			self.v = histJson['v']
+			self.t = histJson['t'][-1]
+			self.v = histJson['v'][-1]
 		except requests.exceptions.ConnectionError:
 			pass
