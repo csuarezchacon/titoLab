@@ -46,13 +46,13 @@ while True:
 			buyDscAmnt = float(100)
 			buyStat = ""
 			finalMaxBid = float(tkrNew.max_bid) + float(buyDscAmnt)
-			if ((tkrNew.last_price < tkrNew.max_bid) and (finalMaxBid < tkrOld.max_bid)):
+			if ((float(tkrNew.last_price) < float(tkrNew.max_bid)) and (float(finalMaxBid) < float(tkrOld.max_bid))):
 				buyStat = "BUY"
 
 			sellDscAmnt = 100
 			sellStat = ""
 			finalMinAsk = float(tkrOld.min_ask) - float(sellDscAmnt)
-			if ((tkrNew.last_price >= tkrNew.min_ask) and (tkrNew.min_ask > finalMinAsk)):
+			if ((float(tkrNew.last_price) >= float(tkrNew.min_ask)) and (float(tkrNew.min_ask) > float(finalMinAsk))):
 				sellStat = "SELL"
 
 			logging.info("| RESUMEN | " +
