@@ -13,16 +13,16 @@ class Ticker():
 	market_id=""
 
 	def setTicker(self, inLastPrice, inMaxBid, inMinAsk, inPrice24h, inPrice7d, inMarketId):
-		self.last_price = inLastPrice
-		self.max_bid = inMaxBid
-		self.min_ask = inMinAsk
-		self.price_variation_24h = inPrice24h
-		self.price_variation_7d = inPrice7d
+		self.last_price = float(inLastPrice)
+		self.max_bid = float(inMaxBid)
+		self.min_ask = float(inMinAsk)
+		self.price_variation_24h = float(inPrice24h)
+		self.price_variation_7d = float(inPrice7d)
 		self.market_id = inMarketId
 
-	def getTicker(self, mkt):
+	def getTicker(self, inMkt):
 		try:
-			url = 'https://www.buda.com/api/v2/markets/' + mkt + '/ticker.json'
+			url = 'https://www.buda.com/api/v2/markets/' + inMkt + '/ticker.json'
 			req = requests.get(url)
 
 			tkrJson = json.loads(req.text)
