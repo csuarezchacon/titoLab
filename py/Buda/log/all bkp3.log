@@ -562,7 +562,3 @@
 2018-06-08 09:21:28 [INFO] | RESUMEN | 384383.0 | 386820.6 | 376657.66 | 382332.13 | 382332.13 | 385113.08 | 375426.67 | 
 2018-06-08 09:22:59 [INFO] Error inesperado: float division by zero
 2018-06-08 09:23:15 [INFO] Error inesperado: float division by zero
-2018-06-08 09:27:23 [INFO] | RESUMEN | 384383.0 | 386820.6 | 376657.66 | 382332.13 | 382332.13 | 386593.08 | 375426.67 | 
-2018-06-08 09:28:24 [INFO] Error inesperado: float division by zero
-2018-06-08 09:31:07 [INFO] Error inesperado: float division by zero
-2018-06-08 09:31:14 [INFO] | RESUMEN | 384383.0 | 386820.6 | 376657.66 | 382332.13 | 382332.13 | 385206.41 | 375426.67 | 
