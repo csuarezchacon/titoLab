@@ -9,12 +9,12 @@ initialize_logger('log')
 mkt = 'eth-clp'
 
 hstOld = History()
-hstOld.getHistory(False, mkt)
+#hstOld.getHistory(False, mkt)
 
 tkrOld = Ticker()
-tkrOld.getTicker(mkt)
+#tkrOld.getTicker(mkt)
 
-logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | VAL BUY | VAL SELL | BUY | SELL |" )
+logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | BUY | SELL |" )
 
 try:
 
@@ -44,6 +44,12 @@ while True:
 				flgNew = True
 
 		if flgNew:
+
+			difHL = hstOld.h - hstOld.l #Tamaño de trade
+			difOL = hstOld.o - hstOld.l #Ubicación del Open
+			difCL = hstOld.c - hstOld.l #Ubicación del Close
+
+			difBy = difHL - difCL #Si sube validar compra
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +
