@@ -9,14 +9,19 @@ initialize_logger('log')
 mkt = 'eth-clp'
 
 hstOld = History()
-#hstOld.getHistory(False, mkt)
+hstOld.getHistory(False, mkt)
 
 tkrOld = Ticker()
-#tkrOld.getTicker(mkt)
+tkrOld.getTicker(mkt)
 
 logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | BUY | SELL |" )
 
 try:
+	difHLOld = hstOld.h - hstOld.l #Tamaño de trade
+	difOLOld = hstOld.o - hstOld.l #Ubicación del Open
+	difCLOld = hstOld.c - hstOld.l #Ubicación del Close
+
+	difBuyOld = difHLOld - difCLOld #Si sube validar compra
 
 	logging.info("| RESUMEN | " +
 		str(hstOld.o) + " | " +
@@ -32,6 +37,7 @@ except:
 while True:
 	try:
 		flgNew = False
+		indBuy = ""
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
@@ -45,11 +51,14 @@ while True:
 
 		if flgNew:
 
-			difHL = hstOld.h - hstOld.l #Tamaño de trade
-			difOL = hstOld.o - hstOld.l #Ubicación del Open
-			difCL = hstOld.c - hstOld.l #Ubicación del Close
+			difHLNew = hstNew.h - hstNew.l #Tamaño de trade
+			difOLNew = hstNew.o - hstNew.l #Ubicación del Open
+			difCLNew = hstNew.c - hstNew.l #Ubicación del Close
 
-			difBy = difHL - difCL #Si sube validar compra
+			difBuyNew = difHLNew - difCLNew #Si sube validar compra
+
+			if difBuyNew > difBuyOld:
+				indBuy = "TRUE"
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +
@@ -57,11 +66,12 @@ while True:
 				str(hstNew.l) + " | " +
 				str(hstNew.c) + " | " +
 				str(tkrNew.last_price) + " | " +
-				" | " +
+				indBuy + " | " +
 				" | ")
 
 			hstOld = hstNew
 			tkrOld = tkrNew
+			difBuyOld = difBuyNew
 
 	except Exception as e:
 		logging.info("Error inesperado: " + str(e))
