@@ -34,9 +34,9 @@ class History():
 			dateFrom = str(int(dateTo) - sec)
 
 			url = 'https://www.buda.com/api/v2/tv/history?symbol=' + inMkt + '&resolution=D&from=' + dateFrom + '&to=' + dateTo
-			req = requests.get(url)
+			res = requests.get(url)
 			
-			hstJson = json.loads(req.text)
+			hstJson = json.loads(res.text)
 			self.setHistory(hstJson['o'][-1],
 				hstJson['h'][-1],
 				hstJson['l'][-1],

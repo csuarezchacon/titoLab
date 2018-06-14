@@ -4,9 +4,72 @@ from History import History
 from Logger import *
 from Ticker import Ticker
 
+
+import base64
+import hashlib
+import hmac
+import json
+import requests
+from Core import Core
+from trading_api_wrappers import Buda
+
 initialize_logger('log')
 
 mkt = 'eth-clp'
+
+cr = Core()
+
+#-------------------
+def gen_nonce():
+	# Get a str from the current time in microseconds.
+	return str(int(time.time() * 1E6))
+
+def build_route(inPath, inParams):
+	retorno = inPath + inParams
+	return retorno
+
+def _sign_payload(method, path, params, payload):
+	try:
+		route = build_route(path, params)
+		nonce = gen_nonce()
+		if payload:
+			j = json.dumps(payload).encode('utf-8')
+			encoded_body = base64.standard_b64encode(j).decode('utf-8')
+			string = method + ' ' + route + ' ' + encoded_body + ' ' + nonce
+		else:
+			string = method + ' ' + route + ' ' + nonce
+
+		h = hmac.new(key=cr.s.encode('utf-8'), msg=string.encode('utf-8'), digestmod=hashlib.sha384)
+
+		signature = h.hexdigest()
+
+		return {
+			'X-SBTC-APIKEY': cr.k,
+			'X-SBTC-NONCE': nonce,
+			'X-SBTC-SIGNATURE': signature,
+			'Content-Type': 'application/json'
+		}
+	except Exception as e:
+		print(e)
+
+def getBalance():
+	signature = _sign_payload('GET', '/api/v2/balances', '', False)
+	
+	signature['X-SBTC-APIKEY']
+	signature['X-SBTC-SIGNATURE']
+
+	buda = Buda.Auth(cr.k, cr.s)
+	print(buda.balance('BTC'))
+	
+	#url = 'https://www.buda.com/api/v2/balances'
+	
+	#url = 'https://www.buda.com/api/v2/markets/' + mkt + '/orders'
+	#res = requests.get(url, auth=(signature['X-SBTC-APIKEY'], signature['X-SBTC-SIGNATURE']))
+
+	#print(res.text)
+	#_sign_payload('GET', '/api/v2/balances', "", True)
+
+#-------------------
 
 hstOld = History()
 hstOld.getHistory(False, mkt)
@@ -31,6 +94,7 @@ try:
 		str(tkrOld.last_price) + " | " +
 		" | " + 
 		" |" )
+	getBalance()
 except:
 	 logging.info("Error inesperado al iniciar valores")
 	

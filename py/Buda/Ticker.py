@@ -23,9 +23,9 @@ class Ticker():
 	def getTicker(self, inMkt):
 		try:
 			url = 'https://www.buda.com/api/v2/markets/' + inMkt + '/ticker.json'
-			req = requests.get(url)
+			res = requests.get(url)
 
-			tkrJson = json.loads(req.text)
+			tkrJson = json.loads(res.text)
 			self.setTicker(tkrJson['ticker']['last_price'][0], 
 				tkrJson['ticker']['max_bid'][0], 
 				tkrJson['ticker']['min_ask'][0], 

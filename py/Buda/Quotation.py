@@ -31,9 +31,9 @@ class Quotation():
 				
 			url = 'https://www.buda.com/api/v2/markets/' + inMkt + '/quotations.json'
 			paramData = {"type": valType, "limit": None, "amount": inAmount, "market_id": None}
-			req = requests.post(url, data=paramData)
+			res = requests.post(url, data=paramData)
 
-			qttJson = json.loads(req.text)
+			qttJson = json.loads(res.text)
 			self.setQuotation(qttJson['quotation']['amount'][0], 
 				qttJson['quotation']['base_balance_change'][0], 
 				qttJson['quotation']['base_exchanged'][0], 
