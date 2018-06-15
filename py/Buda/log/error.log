@@ -1,0 +1,1 @@
+2018-06-15 11:43:54 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"code":"not_found","message":"Not found"} (https://www.buda.com/api/v2/balances/)

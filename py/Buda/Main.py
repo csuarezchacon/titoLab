@@ -1,81 +1,24 @@
 import time
 
+from Balances import Balances
+from Core import Core
 from History import History
 from Logger import *
 from Ticker import Ticker
 
-
-import base64
-import hashlib
-import hmac
-import json
-import requests
-from Core import Core
-from trading_api_wrappers import Buda
-
 initialize_logger('log')
 
 mkt = 'eth-clp'
+cur = 'ETH'
+amntSellDif = float(1000)
 
 cr = Core()
 
-#-------------------
-def gen_nonce():
-	# Get a str from the current time in microseconds.
-	return str(int(time.time() * 1E6))
-
-def build_route(inPath, inParams):
-	retorno = inPath + inParams
-	return retorno
-
-def _sign_payload(method, path, params, payload):
-	try:
-		route = build_route(path, params)
-		nonce = gen_nonce()
-		if payload:
-			j = json.dumps(payload).encode('utf-8')
-			encoded_body = base64.standard_b64encode(j).decode('utf-8')
-			string = method + ' ' + route + ' ' + encoded_body + ' ' + nonce
-		else:
-			string = method + ' ' + route + ' ' + nonce
-
-		h = hmac.new(key=cr.s.encode('utf-8'), msg=string.encode('utf-8'), digestmod=hashlib.sha384)
-
-		signature = h.hexdigest()
-
-		return {
-			'X-SBTC-APIKEY': cr.k,
-			'X-SBTC-NONCE': nonce,
-			'X-SBTC-SIGNATURE': signature,
-			'Content-Type': 'application/json'
-		}
-	except Exception as e:
-		print(e)
-
-def getBalance():
-	signature = _sign_payload('GET', '/api/v2/balances', '', False)
-	
-	signature['X-SBTC-APIKEY']
-	signature['X-SBTC-SIGNATURE']
-
-	buda = Buda.Auth(cr.k, cr.s)
-	print(buda.balance('BTC'))
-	
-	#url = 'https://www.buda.com/api/v2/balances'
-	
-	#url = 'https://www.buda.com/api/v2/markets/' + mkt + '/orders'
-	#res = requests.get(url, auth=(signature['X-SBTC-APIKEY'], signature['X-SBTC-SIGNATURE']))
-
-	#print(res.text)
-	#_sign_payload('GET', '/api/v2/balances', "", True)
-
-#-------------------
-
 hstOld = History()
-hstOld.getHistory(False, mkt)
+#hstOld.getHistory(False, mkt)
 
 tkrOld = Ticker()
-tkrOld.getTicker(mkt)
+#tkrOld.getTicker(mkt)
 
 logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | BUY | SELL |" )
 
@@ -94,7 +37,6 @@ try:
 		str(tkrOld.last_price) + " | " +
 		" | " + 
 		" |" )
-	getBalance()
 except:
 	 logging.info("Error inesperado al iniciar valores")
 	
@@ -102,6 +44,9 @@ while True:
 	try:
 		flgNew = False
 		indBuy = ""
+
+		blncs = Balances()
+		blncs.getBalances(cur, cr.k, cr.s)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
@@ -120,9 +65,16 @@ while True:
 			difCLNew = hstNew.c - hstNew.l #Ubicación del Close
 
 			difBuyNew = difHLNew - difCLNew #Si sube validar compra
-
-			if difBuyNew > difBuyOld:
-				indBuy = "TRUE"
+			
+			if difCLNew > difOLNew:
+				if blncs.available_amount > 0.002000000:
+					#print('monto disponible permite comprar')
+					if (difBuyNew + amntSellDif) > difBuyOld:
+						indBuy = "SELL"
+					elif (difBuyNew - amntSellDif) < difBuyOld:
+						indBuy = "BUY"
+				#else:
+				#	print('monto disponible NO permite vender')
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +
