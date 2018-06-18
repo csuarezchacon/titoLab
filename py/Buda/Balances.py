@@ -19,7 +19,7 @@ class Balances():
 		try:
 			buda = Buda.Auth(inK, inS)
 			res = buda.balance(inCur)
-			#print(res)
+			
 			self.setBalances(res.id,
 				res.amount.amount,
 				res.available_amount.amount,
