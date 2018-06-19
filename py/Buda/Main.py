@@ -4,13 +4,18 @@ from Balances import Balances
 from Core import Core
 from History import History
 from Logger import *
+from Order import Order
 from Ticker import Ticker
 
 initialize_logger('log')
 
 mkt = 'eth-clp'
 cur = 'ETH'
-amntSellDif = float(0)
+
+amntBuyDif = float(500)
+amntSellDif = float(500)
+
+minTrade = float(0.002000000)
 
 cr = Core()
 
@@ -47,7 +52,7 @@ while True:
 		indSell = ""
 
 		blncs = Balances()
-		blncs.getBalances(cur, cr.k, cr.s)
+		blncs.getBalances(cur, cr)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
@@ -67,22 +72,27 @@ while True:
 
 			difBuyNew = difHLNew - difCLNew #Si sube validar compra
 			
-			#if difCLNew > difOLNew:
+			#if hstNew.c != hstOld.c:
 			#	if blncs.available_amount > 0.002000000:
-					#print('monto disponible permite comprar')
-			#		if ((difBuyNew + amntSellDif) > difBuyOld):
+			#		if ((hstNew.c + amntSellDif) > hstOld.c):
 			#			indBuy = "SELL"
-			#		elif ((difBuyNew - amntSellDif) < difBuyOld):
-			#			indBuy = "BUY"
-				#else:
-				#	print('monto disponible NO permite vender')
+			#	elif ((hstNew.c + amntBuyDif) < hstOld.c):
+			#		indSell = "BUY"
 
-			if hstNew.c != hstOld.c:
-				if blncs.available_amount > 0.002000000:
-					if hstNew.c > hstOld.c:
-						indBuy = "SELL"
-				elif hstNew.c < hstOld.c:
-					indSell = "BUY"
+			if ((hstNew.c > (hstOld.c + amntSellDif)) or (hstNew.h > hstOld.h)):
+				if blncs.available_amount > minTrade:
+					indSell = "SELL" #ask
+					ordNew = Order()
+					ordNew.doOrder(mkt, cr, "ask", 0.001, hstNew.c)
+					print(ordNew.order)
+
+
+			if ((hstNew.c < (hstOld.c - amntBuyDif)) or (hstNew.l < hstOld.l)):
+				if tkrNew.last_price > hstNew.c:
+					indBuy = "BUY" #bid
+					ordNew = Order()
+					ordNew.doOrder(mkt, cr, "bid", 0.001, hstNew.c)
+					print(ordNew.order)
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +
@@ -100,9 +110,3 @@ while True:
 	except Exception as e:
 		logging.info("Error inesperado: " + str(e))
 	#time.sleep(5)
-
-#2018-06-16 23:42:36 [INFO] | RESUMEN | 317000,0 | 317000,0 | 317000,0 | 317000,0 | 317000,0 |  |  | 
-#2018-06-16 23:58:34 [INFO] | RESUMEN | 317000,0 | 317100,0 | 317000,0 | 317100,0 | 317000,0 |  |  | 
-#2018-06-16 23:58:58 [INFO] | RESUMEN | 317000,0 | 317100,0 | 317000,0 | 317100,0 | 317100,0 |  |  | 
-#2018-06-17 00:07:58 [INFO] | RESUMEN | 317000,0 | 328844,78 | 317000,0 | 328844,78 | 317100,0 |  |  | 
-#2018-06-17 00:08:07 [INFO] | RESUMEN | 317000,0 | 328844,78 | 317000,0 | 328844,78 | 328844,78 |  |  | 

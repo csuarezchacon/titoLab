@@ -15,9 +15,9 @@ class Balances():
 		self.frozen_amount = float(inFrozenAmount)
 		self.pending_withdrawal_amount = float(inPendingWithdrawalAmount)
 
-	def getBalances(self, inCur, inK, inS):
+	def getBalances(self, inCur, inCo):
 		try:
-			buda = Buda.Auth(inK, inS)
+			buda = Buda.Auth(inCo.k, inCo.s)
 			res = buda.balance(inCur)
 			
 			self.setBalances(res.id,
