@@ -12,8 +12,8 @@ initialize_logger('log')
 mkt = 'eth-clp'
 cur = 'ETH'
 
-amntBuyDif = float(500)
-amntSellDif = float(500)
+amntBuyDif = float(3000)
+amntSellDif = float(1000)
 
 minTrade = float(0.002000000)
 
@@ -88,11 +88,11 @@ while True:
 
 
 			if ((hstNew.c < (hstOld.c - amntBuyDif)) or (hstNew.l < hstOld.l)):
-				if tkrNew.last_price > hstNew.c:
-					indBuy = "BUY" #bid
-					ordNew = Order()
-					ordNew.doOrder(mkt, cr, "bid", 0.001, hstNew.c)
-					print(ordNew.order)
+				#if tkrNew.last_price > hstNew.c:
+				indBuy = "BUY" #bid
+				ordNew = Order()
+				ordNew.doOrder(mkt, cr, "bid", 0.001, hstNew.c)
+				print(ordNew.order)
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +

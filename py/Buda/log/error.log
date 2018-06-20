@@ -1,1 +1,1 @@
-2018-06-15 11:43:54 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"code":"not_found","message":"Not found"} (https://www.buda.com/api/v2/balances/)
+2018-06-20 12:36:12 [ERROR] Trading API: InvalidResponse (Code: 401): Message: {"code":"not_authorized","message":"Invalid credentials"} (https://www.buda.com/api/v2/balances/ETH)
