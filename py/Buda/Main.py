@@ -9,8 +9,8 @@ from Ticker import Ticker
 
 initialize_logger('log')
 
-mkt = 'eth-clp'
-cur = 'ETH'
+mkt = 'btc-clp'
+cur = 'BTC'
 
 amntBuyDif = float(3000)
 amntSellDif = float(1000)
@@ -82,17 +82,17 @@ while True:
 			if ((hstNew.c > (hstOld.c + amntSellDif)) or (hstNew.h > hstOld.h)):
 				if blncs.available_amount > minTrade:
 					indSell = "SELL" #ask
-					ordNew = Order()
-					ordNew.doOrder(mkt, cr, "ask", 0.001, hstNew.c)
-					print(ordNew.order)
+					#ordNew = Order()
+					#ordNew.doOrder(mkt, cr, "ask", 0.001, hstNew.c)
+					#print(ordNew.order)
 
 
 			if ((hstNew.c < (hstOld.c - amntBuyDif)) or (hstNew.l < hstOld.l)):
 				#if tkrNew.last_price > hstNew.c:
 				indBuy = "BUY" #bid
-				ordNew = Order()
-				ordNew.doOrder(mkt, cr, "bid", 0.001, hstNew.c)
-				print(ordNew.order)
+				#ordNew = Order()
+				#ordNew.doOrder(mkt, cr, "bid", 0.001, hstNew.c)
+				#print(ordNew.order)
 
 			logging.info("| RESUMEN | " +
 				str(hstNew.o) + " | " +
