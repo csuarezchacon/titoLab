@@ -1,0 +1,1 @@
+2018-06-24 22:39:45 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))': /api/v2/markets/eth-clp/ticker

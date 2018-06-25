@@ -33,7 +33,7 @@ class History():
 			dateTo = str(int(dateNow.timestamp()))
 			dateFrom = str(int(dateTo) - sec)
 
-			url = 'https://www.buda.com/api/v2/tv/history?symbol=' + inMkt + '&resolution=D&from=' + dateFrom + '&to=' + dateTo
+			url = 'https://www.buda.com/api/v2/tv/history?symbol=' + inMkt + '&resolution=60&from=' + dateFrom + '&to=' + dateTo
 			res = requests.get(url)
 			
 			hstJson = json.loads(res.text)
