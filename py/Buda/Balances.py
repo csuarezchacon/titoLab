@@ -1,5 +1,7 @@
-from Logger import *
+from Core import Core
 from trading_api_wrappers import Buda
+
+cr = Core()
 
 class Balances():
 	id = ''
@@ -15,9 +17,9 @@ class Balances():
 		self.frozen_amount = float(inFrozenAmount)
 		self.pending_withdrawal_amount = float(inPendingWithdrawalAmount)
 
-	def getBalances(self, inCur, inCo):
+	def getBalances(self, inCur):
 		try:
-			buda = Buda.Auth(inCo.k, inCo.s)
+			buda = Buda.Auth(cr.k, cr.s)
 			res = buda.balance(inCur)
 			
 			self.setBalances(res.id,

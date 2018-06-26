@@ -1,4 +1,3 @@
-from Logger import *
 from trading_api_wrappers import Buda
 
 class Ticker():
