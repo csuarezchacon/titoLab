@@ -32,15 +32,24 @@ try:
 		str(tkrOld.last_price) + " | " + str(tkrOld.max_bid) + " | " + str(tkrOld.min_ask) + " |" )
 except:
 	 logging.info("Error inesperado al iniciar valores")
-	
+
+ordr = Order()
+ordr.new(mkt, 'ask', 0.001, 400000.00)
+
 while True:
 	try:
 		flgNew = False
 		indBuy = ""
 		indSell = ""
 
-		blncs = Balances()
-		blncs.getBalances(cur)
+		#blncs = Balances()
+		#blncs.getBalances(cur)
+
+		order = Order()
+		order.myOrders(mkt, 'received')
+		print(order.orderList)
+		order.myOrders(mkt, 'pending')
+		print(order.orderList)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
