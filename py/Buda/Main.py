@@ -34,7 +34,7 @@ except:
 	 logging.info("Error inesperado al iniciar valores")
 
 ordr = Order()
-ordr.new(mkt, 'ask', 0.001, 400000.00)
+ordr.new(mkt, 'ask', 0.001, 410000.00)
 
 while True:
 	try:
@@ -42,14 +42,26 @@ while True:
 		indBuy = ""
 		indSell = ""
 
+		idBid = 0
+		idAsk = 0
+
 		#blncs = Balances()
 		#blncs.getBalances(cur)
 
 		order = Order()
-		order.myOrders(mkt, 'received')
-		print(order.orderList)
+
 		order.myOrders(mkt, 'pending')
-		print(order.orderList)
+		if len(order.orderList.orders) > 0:
+			for it in order.orderList.orders:
+				if it.type == 'Ask':
+					idAsk = it.id
+					break
+				elif it.type == 'Bid':
+					idBid = it.id
+					break
+
+		print(idBid)
+		print(idAsk)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
