@@ -42,8 +42,10 @@ while True:
 		indBuy = ""
 		indSell = ""
 
-		idBid = 0
-		idAsk = 0
+		bidId = 0
+		bidLimitAmount = float(0)
+		askId = 0
+		askLimitAmount = float(0)
 
 		#blncs = Balances()
 		#blncs.getBalances(cur)
@@ -54,14 +56,16 @@ while True:
 		if len(order.orderList.orders) > 0:
 			for it in order.orderList.orders:
 				if it.type == 'Ask':
-					idAsk = it.id
+					askId = it.id
+					askLimitAmount = it.limit.amount
 					break
 				elif it.type == 'Bid':
-					idBid = it.id
+					bidId = it.id
+					bidLimitAmount = it.limit.amount
 					break
 
-		print(idBid)
-		print(idAsk)
+		print(askLimitAmount)
+		print(bidLimitAmount)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
