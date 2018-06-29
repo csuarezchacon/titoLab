@@ -12,12 +12,12 @@ initialize_logger('log')
 mkt = 'eth-clp'
 cur = 'ETH'
 
-amntBuyDif = float(3000)
-amntSellDif = float(1000)
+limit = float(0.001)
 
 minTrade = float(0.002000000)
 
 #macd = MACD()
+flgBid = False
 
 hstOld = History()
 hstOld.getHistory(False, mkt)
@@ -32,9 +32,6 @@ try:
 		str(tkrOld.last_price) + " | " + str(tkrOld.max_bid) + " | " + str(tkrOld.min_ask) + " |" )
 except:
 	 logging.info("Error inesperado al iniciar valores")
-
-ordr = Order()
-ordr.new(mkt, 'ask', 0.001, 410000.00)
 
 while True:
 	try:
@@ -51,8 +48,8 @@ while True:
 		#blncs.getBalances(cur)
 
 		order = Order()
-
 		order.myOrders(mkt, 'pending')
+
 		if len(order.orderList.orders) > 0:
 			for it in order.orderList.orders:
 				if it.type == 'Ask':
@@ -63,9 +60,6 @@ while True:
 					bidId = it.id
 					bidLimitAmount = it.limit.amount
 					break
-
-		print(askLimitAmount)
-		print(bidLimitAmount)
 
 		hstNew = History()
 		hstNew.getHistory(False, mkt)
@@ -86,6 +80,23 @@ while True:
 				flgNew = True
 
 		if flgNew:
+			msgAsk = ''
+			msgBid = ''
+			
+			if ((tkrNew.min_ask != tkrOld.min_ask) and flgBid):
+				if askId != 0:
+					order.cancel(askId)
+					msgAsk = msgAsk + 'orden ask ' + str(askId) + ' cancelada, '
+				order.new(mkt, 'ask', limit, tkrNew.min_ask)
+				print(msgAsk + 'se creó nueva orden ask')
+
+			if tkrNew.max_bid != tkrOld.max_bid:
+				if bidId != 0:
+					order.cancel(bidId)
+					msgBid = msgBid + 'orden bid ' + str(bidId) + ' cancelada, '
+				order.new(mkt, 'bid', limit, tkrNew.max_bid)
+				print(msgBid + 'se creó nueva orden bid')
+				flgBid = True
 
 			logging.info("| RESUMEN | " + str(hstNew.o) + " | " + str(hstNew.h) + " | " + str(hstNew.l) + " | " + str(hstNew.c) + " | " +
 				str(tkrNew.last_price) + " | " + str(tkrNew.max_bid) + " | " + str(tkrNew.min_ask) + " | ")

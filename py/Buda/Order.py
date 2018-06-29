@@ -15,7 +15,7 @@ class Order():
 		except Exception:
 			pass
 
-	def cancel(orderId):
+	def cancel(self, orderId):
 		try:
 			buda = Buda.Auth(cr.k, cr.s)
 			buda.cancel_order(orderId)
