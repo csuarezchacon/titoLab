@@ -9,7 +9,7 @@ initialize_logger('log')
 mkt = 'btc-clp'
 cur = 'BTC'
 
-limit = float(0.0001)
+limit = float(0.00025)
 
 minTrade = float(0.000200000)
 
