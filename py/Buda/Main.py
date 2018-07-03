@@ -73,14 +73,30 @@ while True:
 				flgNew = True
 
 		if flgNew:
-
-			if hstNew.o < hstNew.c:
+			msgAsk = ''
+			msgBid = ''
+			if hstNew.o <= hstNew.c:
 				#Buller
 				cntAsk = 0
 				cntBid += 1
 
 				if cntBid == 1:
 					logging.info('VERDE')
+
+				if tkrNew.max_bid != tkrOld.max_bid:
+					if bidId != 0:
+						order.cancel(bidId)
+						msgBid = msgBid + 'orden bid ' + str(bidId) + ' cancelada, '
+					order.new(mkt, 'bid', limit, tkrNew.max_bid)
+					print(msgBid + 'se creó nueva orden bid')
+					flgBid = True
+
+				if tkrNew.min_ask != tkrOld.min_ask:
+					if askId != 0:
+						order.cancel(askId)
+						msgAsk = msgAsk + 'orden ask ' + str(askId) + ' cancelada, '
+					order.new(mkt, 'ask', limit, tkrNew.min_ask)
+					print(msgAsk + 'se creó nueva orden ask')
 
 			elif hstNew.o > hstNew.c:
 				#Bearing
