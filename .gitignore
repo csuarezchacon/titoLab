@@ -1,3 +1,6 @@
 py/Buda/__pycache__
 py/Buda/Core.py
 py/Buda/trading-api-wrappers
+py/Buda2/__pycache__
+py/Buda2/Core.py
+py/Buda2/trading-api-wrappers
