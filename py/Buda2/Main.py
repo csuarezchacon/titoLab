@@ -10,13 +10,14 @@ hstOld = History()
 tkrOld = Ticker()
 
 def prntLog(inHst, inTkr):
-	logging.info("| RES | " + 
-		str(inHst.ohlc[0]['o']) + " | " + str(inHst.ohlc[0]['h']) + " | " + str(inHst.ohlc[0]['l']) + " | " + str(inHst.ohlc[0]['c']) + " | " + 
-		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
+#	logging.info("| RES | " + 
+#		str(inHst.ohlc[0]['o']) + " | " + str(inHst.ohlc[0]['h']) + " | " + str(inHst.ohlc[0]['l']) + " | " + str(inHst.ohlc[0]['c']) + " | " + 
+#		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
+	logging.info(str(inHst.ohlc) + "\n\n" + str(inHst.ohlcAvrg))
 
 try:
-	#hstOld.getHistory(dtRng60, mS60, mkt)
-	#tkrOld.getTicker(mkt)
+	hstOld.getHistory(dtRng60, mS60, mkt)
+	tkrOld.getTicker(mkt)
 	
 	logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | MAXBID | MINASK |" )
 
