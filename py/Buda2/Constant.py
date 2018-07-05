@@ -1,7 +1,10 @@
 # General
 mkt = 'btc-clp'
-cur = 'BTC'
+curBtc = 'btc'
+curClp = 'clp'
 limit = float(0.00025)
+minBid = float(500)
+minAsk = float(0.0002)
 
 # Milliseconds in days
 mSDay = 86400

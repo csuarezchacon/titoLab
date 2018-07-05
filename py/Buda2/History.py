@@ -51,7 +51,5 @@ class History():
 				"c": (self.ohlcAvrg['c'] / cnt)}
 			self.ohlcAvrg = registro
 
-			print(res.text)
-
 		except requests.exceptions.ConnectionError:
 			pass
