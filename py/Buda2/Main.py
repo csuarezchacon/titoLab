@@ -3,6 +3,7 @@ from Logger import *
 
 from Balances import Balances
 from History import History
+from Order import Order
 from Ticker import Ticker
 
 initialize_logger('log')
@@ -18,9 +19,27 @@ def prntLog(inHst, inTkr):
 		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
 #	logging.info(str(inHst.ohlc) + "\n\n" + str(inHst.ohlcAvrg))
 
+def pendiengOrders(inOrderList):
+	bidOrder = {'oId':0, 'oType':'', 'oLimit':float(0)}
+	askOrder = {'oId':0, 'oType':'', 'oLimit':float(0)}
+
+	if len(inOrderList) > 0:
+
+		for i in inOrderList:
+			if ((i.type == 'Bid') and (bidOrder['oId'] == 0)):
+				bidOrder = {'oId':i.id, 'oType':i.type, 'oLimit':i.limit[0]}
+
+			if ((i.type == 'Ask') and (askOrder['oId'] == 0)):
+				askOrder = {'oId':i.id, 'oType':i.type, 'oLimit':i.limit[0]}
+
+			if ((bidOrder['oId'] != 0) and (askOrder['oId'] != 0)):
+				break
+
+	return bidOrder, askOrder
+
 try:
-	hstOld.getHistory(dtRng60, mS60, mkt)
-	tkrOld.getTicker(mkt)
+	#hstOld.getHistory(dtRng60, mS60, mkt)
+	#tkrOld.getTicker(mkt)
 	
 	logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | MAXBID | MINASK |" )
 
@@ -33,11 +52,15 @@ try:
 		flgNew = False
 		
 		blc = Balances()
+		order = Order()
+
 		hstNew = History()
 		tkrNew = Ticker()
 
 		hstNew.getHistory(dtRng60, mS60, mkt)
 		tkrNew.getTicker(mkt)
+
+		order.myOrders(mkt, 'pending')
 
 		blc.getBalances(curClp)
 		flgBid = blc.available_amount > minBid
@@ -54,6 +77,11 @@ try:
 
 		if flgNew:
 			prntLog(hstNew, tkrNew)
+
+			pendingBid, pendingAsk = pendiengOrders(order.orderList.orders)
+
+			print('bid: ' + str(pendingBid))
+			print('ask: ' + str(pendingAsk))
 
 			hstOld = hstNew
 			tkrOld = tkrNew
