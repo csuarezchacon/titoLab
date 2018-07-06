@@ -11,6 +11,8 @@ initialize_logger('log')
 hstOld = History()
 tkrOld = Ticker()
 
+order = Order()
+
 def prntLog(inHst, inTkr):
 	cnd = inHst.ohlc[-1] # Candle
 	tnd = 'V' if cnd['o'] <= cnd['c'] else 'R' # Tending Verde o Rojo
@@ -19,13 +21,15 @@ def prntLog(inHst, inTkr):
 		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
 #	logging.info(str(inHst.ohlc) + "\n\n" + str(inHst.ohlcAvrg))
 
-def pendiengOrders(inOrderList):
+def bidAskOrders(inStatus):
+	order.myOrders(mkt, inStatus)
+	
 	bidOrder = {'oId':0, 'oType':'', 'oLimit':float(0)}
 	askOrder = {'oId':0, 'oType':'', 'oLimit':float(0)}
 
-	if len(inOrderList) > 0:
+	if len(order.orderList.orders) > 0:
 
-		for i in inOrderList:
+		for i in order.orderList.orders:
 			if ((i.type == 'Bid') and (bidOrder['oId'] == 0)):
 				bidOrder = {'oId':i.id, 'oType':i.type, 'oLimit':i.limit[0]}
 
@@ -37,9 +41,19 @@ def pendiengOrders(inOrderList):
 
 	return bidOrder, askOrder
 
+def newOrder(inId, inType, inAmount):
+	msg = '' 
+
+	if inId != 0:
+		order.cancel(inId)
+		msg = msg + 'orden ' + inType + ' ' + str(inId) + ' cancelada, '
+
+	order.new(mkt, inType, limit, inAmount)
+	print(msg + 'se creó nueva orden ' + inType)
+
 try:
-	#hstOld.getHistory(dtRng60, mS60, mkt)
-	#tkrOld.getTicker(mkt)
+	hstOld.getHistory(dtRng60, mS60, mkt)
+	tkrOld.getTicker(mkt)
 	
 	logging.info("| | OPEN | HIGH | LOW | CLOSE | LAST PRICE | MAXBID | MINASK |" )
 
@@ -52,15 +66,12 @@ try:
 		flgNew = False
 		
 		blc = Balances()
-		order = Order()
 
 		hstNew = History()
 		tkrNew = Ticker()
 
 		hstNew.getHistory(dtRng60, mS60, mkt)
 		tkrNew.getTicker(mkt)
-
-		order.myOrders(mkt, 'pending')
 
 		blc.getBalances(curClp)
 		flgBid = blc.available_amount > minBid
@@ -70,7 +81,17 @@ try:
 
 		cndlOld = hstOld.ohlc[-1]
 		cndlNew = hstNew.ohlc[-1]
+
+		pendingBid, pendingAsk = bidAskOrders('pending')
+		tradedBid, tradedAsk = bidAskOrders('traded')
 		
+		if cndlNew['o'] <= cndlNew['c']:
+			if ((flgBid == True) and (pendingBid['oId'] == 0)):
+				#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
+				pass
+			if ((flgAsk == True) and (pendingAsk['oId'] == 0)):
+				newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+
 		if ((cndlNew['o'] != 0) and (cndlNew['h'] != 0) and (cndlNew['l'] != 0) and (cndlNew['c'] != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
 			if ((cndlOld['o'] != cndlNew['o']) or (cndlOld['h'] != cndlNew['h']) or (cndlOld['l'] != cndlNew['l']) or (cndlOld['c'] != cndlNew['c']) or (tkrOld.last_price != tkrNew.last_price) or (tkrOld.max_bid != tkrNew.max_bid) or (tkrOld.min_ask != tkrNew.min_ask)):
 				flgNew = True
@@ -78,10 +99,14 @@ try:
 		if flgNew:
 			prntLog(hstNew, tkrNew)
 
-			pendingBid, pendingAsk = pendiengOrders(order.orderList.orders)
-
-			print('bid: ' + str(pendingBid))
-			print('ask: ' + str(pendingAsk))
+			if cndlNew['o'] <= cndlNew['c']:
+				if flgBid:
+					if ((tkrOld.max_bid != 0) and (tkrOld.max_bid != tkrNew.max_bid)):
+						#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
+						pass
+				if flgAsk:
+					if ((tkrOld.min_ask != 0) and (tkrOld.min_ask != tkrNew.min_ask)):
+						newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
 
 			hstOld = hstNew
 			tkrOld = tkrNew

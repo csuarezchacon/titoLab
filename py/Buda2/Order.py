@@ -25,7 +25,7 @@ class Order():
 	def myOrders(self, inMkt, inStatus):
 		try:
 			buda = Buda.Auth(cr.k, cr.s)
-			self.orderList = buda.order_pages(inMkt, None, None, inStatus)
+			self.orderList = buda.order_pages(inMkt, 1, None, inStatus)
 
 		except Exception:
 			pass

@@ -1,2 +1,1 @@
-2018-07-05 16:17:51 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"message":"Not found","code":"not_found"} (https://www.buda.com/api/v2/balances/bth)
-2018-07-05 16:17:55 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"message":"Not found","code":"not_found"} (https://www.buda.com/api/v2/balances/bth)
+2018-07-06 17:16:12 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /api/v2/balances/btc
