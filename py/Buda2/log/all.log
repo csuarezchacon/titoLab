@@ -1,3 +1,2 @@
-2018-07-06 17:13:08 [INFO] | | OPEN | HIGH | LOW | CLOSE | LAST PRICE | MAXBID | MINASK |
-2018-07-06 17:13:08 [INFO] | V | 4374995.0 | 4374995.0 | 4374995.0 | 4374995.0 | 4374995.0 | 4320003.0 | 4374995.0 |
-2018-07-06 17:16:12 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /api/v2/balances/btc
+2018-07-23 01:14:08 [INFO] | | OPEN | HIGH | LOW | CLOSE | LAST PRICE | MAXBID | MINASK |
+2018-07-23 01:14:08 [INFO] | V | 5007000.0 | 5015998.0 | 5007000.0 | 5015998.0 | 5015998.0 | 4998530.97 | 5015998.0 |

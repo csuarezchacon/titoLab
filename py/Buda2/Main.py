@@ -14,12 +14,12 @@ tkrOld = Ticker()
 order = Order()
 
 def prntLog(inHst, inTkr):
-	cnd = inHst.ohlc[-1] # Candle
+	cnd = inHst.ohlcList[-1] # Candle
 	tnd = 'V' if cnd['o'] <= cnd['c'] else 'R' # Tending Verde o Rojo
 
 	logging.info("| " + tnd + " | " + str(cnd['o']) + " | " + str(cnd['h']) + " | " + str(cnd['l']) + " | " + str(cnd['c']) + " | " + 
 		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
-#	logging.info(str(inHst.ohlc) + "\n\n" + str(inHst.ohlcAvrg))
+#	logging.info(str(inHst.ohlcList) + "\n\n" + str(inHst.ohlcAvrg))
 
 def bidAskOrders(inStatus):
 	order.myOrders(mkt, inStatus)
@@ -49,7 +49,7 @@ def newOrder(inId, inType, inAmount):
 		msg = msg + 'orden ' + inType + ' ' + str(inId) + ' cancelada, '
 
 	order.new(mkt, inType, limit, inAmount)
-	print(msg + 'se creó nueva orden ' + inType)
+	print(msg + 'se creo nueva orden ' + inType)
 
 try:
 	hstOld.getHistory(dtRng60, mS60, mkt)
@@ -79,8 +79,8 @@ try:
 		blc.getBalances(curBtc)
 		flgAsk = blc.available_amount > minAsk
 
-		cndlOld = hstOld.ohlc[-1]
-		cndlNew = hstNew.ohlc[-1]
+		cndlOld = hstOld.ohlcList[-1]
+		cndlNew = hstNew.ohlcList[-1]
 
 		pendingBid, pendingAsk = bidAskOrders('pending')
 		tradedBid, tradedAsk = bidAskOrders('traded')
@@ -90,14 +90,15 @@ try:
 				#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
 				pass
 			if ((flgAsk == True) and (pendingAsk['oId'] == 0)):
-				newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+				#newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+				pass
 
 		if ((cndlNew['o'] != 0) and (cndlNew['h'] != 0) and (cndlNew['l'] != 0) and (cndlNew['c'] != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
 			if ((cndlOld['o'] != cndlNew['o']) or (cndlOld['h'] != cndlNew['h']) or (cndlOld['l'] != cndlNew['l']) or (cndlOld['c'] != cndlNew['c']) or (tkrOld.last_price != tkrNew.last_price) or (tkrOld.max_bid != tkrNew.max_bid) or (tkrOld.min_ask != tkrNew.min_ask)):
 				flgNew = True
 
 		if flgNew:
-			prntLog(hstNew, tkrNew)
+			#prntLog(hstNew, tkrNew)
 
 			if cndlNew['o'] <= cndlNew['c']:
 				if flgBid:
@@ -106,7 +107,8 @@ try:
 						pass
 				if flgAsk:
 					if ((tkrOld.min_ask != 0) and (tkrOld.min_ask != tkrNew.min_ask)):
-						newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+						#newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+						pass
 
 			hstOld = hstNew
 			tkrOld = tkrNew

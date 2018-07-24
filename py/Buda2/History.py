@@ -3,11 +3,13 @@ import json
 import requests
 import time
 
-from Logger import *
+from OHLC import OHLC
 
 class History():
-	ohlc = [{"o": float(0), "h": float(0), "l": float(0), "c": float(0)}]
-	ohlcAvrg = {"o": float(0), "h": float(0), "l": float(0), "c": float(0)}
+	ohlc = OHLC()
+
+	ohlcList = [ohlc]
+	ohlcAvrg = ohlc
 
 	def getHistory(self, inDtRng, inMlSc, inMkt):
 		try:
@@ -23,33 +25,21 @@ class History():
 
 			arrLen = len(hstJson['o']) - cnt # Largo de lista para obtener últimos movimientos
 			i = 0
-			self.ohlc = []
+			self.ohlcList = []
 
 			while i < cnt:
 
-				registro = {
-					"o": float(hstJson['o'][arrLen]),
-					"h": float(hstJson['h'][arrLen]),
-					"l": float(hstJson['l'][arrLen]),
-					"c": float(hstJson['c'][arrLen])}
-				self.ohlc.append(registro)
+				ohlc.setOHLC(hstJson['o'][arrLen], hstJson['h'][arrLen], hstJson['l'][arrLen], hstJson['c'][arrLen])
+				self.ohlcList.append(ohlc)
 
-				registro = {
-					"o": (self.ohlcAvrg['o'] + hstJson['o'][arrLen]),
-					"h": (self.ohlcAvrg['h'] + hstJson['h'][arrLen]),
-					"l": (self.ohlcAvrg['l'] + hstJson['l'][arrLen]),
-					"c": (self.ohlcAvrg['c'] + hstJson['c'][arrLen])}
-				self.ohlcAvrg = registro
+				ohlc.setOHLC((self.ohlcAvrg.o + hstJson['o'][arrLen]), (self.ohlcAvrg.h + hstJson['h'][arrLen]), (self.ohlcAvrg.l + hstJson['l'][arrLen]), (self.ohlcAvrg.c + hstJson['c'][arrLen]))
+				self.ohlcAvrg = ohlc
 
 				arrLen += 1
 				i += 1
 
-			registro = {
-				"o": (self.ohlcAvrg['o'] / cnt),
-				"h": (self.ohlcAvrg['h'] / cnt),
-				"l": (self.ohlcAvrg['l'] / cnt),
-				"c": (self.ohlcAvrg['c'] / cnt)}
-			self.ohlcAvrg = registro
+			ohlc.setOHLC((self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt))
+			self.ohlcAvrg = ohlc
 
 		except requests.exceptions.ConnectionError:
 			pass
