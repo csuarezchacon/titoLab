@@ -15,9 +15,9 @@ order = Order()
 
 def prntLog(inHst, inTkr):
 	cnd = inHst.ohlcList[-1] # Candle
-	tnd = 'V' if cnd['o'] <= cnd['c'] else 'R' # Tending Verde o Rojo
+	tnd = 'V' if cnd.o <= cnd.c else 'R' # Tending Verde o Rojo
 
-	logging.info("| " + tnd + " | " + str(cnd['o']) + " | " + str(cnd['h']) + " | " + str(cnd['l']) + " | " + str(cnd['c']) + " | " + 
+	logging.info("| " + tnd + " | " + str(cnd.o) + " | " + str(cnd.h) + " | " + str(cnd.l) + " | " + str(cnd.c) + " | " + 
 		str(inTkr.last_price) + " | " + str(inTkr.max_bid) + " | " + str(inTkr.min_ask) + " |" )
 #	logging.info(str(inHst.ohlcList) + "\n\n" + str(inHst.ohlcAvrg))
 
@@ -85,7 +85,7 @@ try:
 		pendingBid, pendingAsk = bidAskOrders('pending')
 		tradedBid, tradedAsk = bidAskOrders('traded')
 		
-		if cndlNew['o'] <= cndlNew['c']:
+		if cndlNew.o <= cndlNew.c:
 			if ((flgBid == True) and (pendingBid['oId'] == 0)):
 				#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
 				pass
@@ -93,14 +93,14 @@ try:
 				#newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
 				pass
 
-		if ((cndlNew['o'] != 0) and (cndlNew['h'] != 0) and (cndlNew['l'] != 0) and (cndlNew['c'] != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
-			if ((cndlOld['o'] != cndlNew['o']) or (cndlOld['h'] != cndlNew['h']) or (cndlOld['l'] != cndlNew['l']) or (cndlOld['c'] != cndlNew['c']) or (tkrOld.last_price != tkrNew.last_price) or (tkrOld.max_bid != tkrNew.max_bid) or (tkrOld.min_ask != tkrNew.min_ask)):
+		if ((cndlNew.o != 0) and (cndlNew.h != 0) and (cndlNew.l != 0) and (cndlNew.c != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
+			if ((cndlOld.o != cndlNew.o) or (cndlOld.h != cndlNew.h) or (cndlOld.l != cndlNew.l) or (cndlOld.c != cndlNew.c) or (tkrOld.last_price != tkrNew.last_price) or (tkrOld.max_bid != tkrNew.max_bid) or (tkrOld.min_ask != tkrNew.min_ask)):
 				flgNew = True
 
 		if flgNew:
 			#prntLog(hstNew, tkrNew)
 
-			if cndlNew['o'] <= cndlNew['c']:
+			if cndlNew.o <= cndlNew.c:
 				if flgBid:
 					if ((tkrOld.max_bid != 0) and (tkrOld.max_bid != tkrNew.max_bid)):
 						#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)

@@ -29,17 +29,17 @@ class History():
 
 			while i < cnt:
 
-				ohlc.setOHLC(hstJson['o'][arrLen], hstJson['h'][arrLen], hstJson['l'][arrLen], hstJson['c'][arrLen])
-				self.ohlcList.append(ohlc)
+				self.ohlc.setOHLC(hstJson['o'][arrLen], hstJson['h'][arrLen], hstJson['l'][arrLen], hstJson['c'][arrLen])
+				self.ohlcList.append(self.ohlc)
 
-				ohlc.setOHLC((self.ohlcAvrg.o + hstJson['o'][arrLen]), (self.ohlcAvrg.h + hstJson['h'][arrLen]), (self.ohlcAvrg.l + hstJson['l'][arrLen]), (self.ohlcAvrg.c + hstJson['c'][arrLen]))
-				self.ohlcAvrg = ohlc
+				self.ohlc.setOHLC((self.ohlcAvrg.o + hstJson['o'][arrLen]), (self.ohlcAvrg.h + hstJson['h'][arrLen]), (self.ohlcAvrg.l + hstJson['l'][arrLen]), (self.ohlcAvrg.c + hstJson['c'][arrLen]))
+				self.ohlcAvrg = self.ohlc
 
 				arrLen += 1
 				i += 1
 
-			ohlc.setOHLC((self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt), (self.ohlcAvrg['o'] / cnt))
-			self.ohlcAvrg = ohlc
+			self.ohlc.setOHLC((self.ohlcAvrg.o / cnt), (self.ohlcAvrg.h / cnt), (self.ohlcAvrg.l / cnt), (self.ohlcAvrg.c / cnt))
+			self.ohlcAvrg = self.ohlc
 
 		except requests.exceptions.ConnectionError:
 			pass
