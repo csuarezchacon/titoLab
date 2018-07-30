@@ -87,10 +87,10 @@ try:
 		
 		if cndlNew.o <= cndlNew.c:
 			if ((flgBid == True) and (pendingBid['oId'] == 0)):
-				#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
+				newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
 				pass
 			if ((flgAsk == True) and (pendingAsk['oId'] == 0)):
-				#newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+				newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
 				pass
 
 		if ((cndlNew.o != 0) and (cndlNew.h != 0) and (cndlNew.l != 0) and (cndlNew.c != 0) and (tkrNew.last_price != 0) and (tkrNew.max_bid != 0) and (tkrNew.min_ask != 0)):
@@ -98,16 +98,16 @@ try:
 				flgNew = True
 
 		if flgNew:
-			#prntLog(hstNew, tkrNew)
+			prntLog(hstNew, tkrNew)
 
 			if cndlNew.o <= cndlNew.c:
 				if flgBid:
 					if ((tkrOld.max_bid != 0) and (tkrOld.max_bid != tkrNew.max_bid)):
-						#newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
+						newOrder(pendingBid['oId'], 'bid', tkrNew.max_bid)
 						pass
 				if flgAsk:
 					if ((tkrOld.min_ask != 0) and (tkrOld.min_ask != tkrNew.min_ask)):
-						#newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
+						newOrder(pendingAsk['oId'], 'ask', tkrNew.min_ask)
 						pass
 
 			hstOld = hstNew

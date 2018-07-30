@@ -1,2 +1,1 @@
-2018-07-05 16:17:51 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"message":"Not found","code":"not_found"} (https://www.buda.com/api/v2/balances/bth)
-2018-07-05 16:17:55 [ERROR] Trading API: InvalidResponse (Code: 404): Message: {"message":"Not found","code":"not_found"} (https://www.buda.com/api/v2/balances/bth)
+2018-07-29 23:41:08 [ERROR] Trading API: InvalidResponse (Code: 422): Message: {"message":"Validation Failed","code":"invalid_record","errors":[{"resource":"Ask","field":"amount_cents","code":"insolvent","message":"insolvent"}]} (https://www.buda.com/api/v2/markets/btc-clp/orders)

@@ -7,9 +7,8 @@ from OHLC import OHLC
 
 class History():
 	ohlc = OHLC()
-
-	ohlcList = [ohlc]
-	ohlcAvrg = ohlc
+	ohlcList = [OHLC()]
+	ohlcAvrg = OHLC()
 
 	def getHistory(self, inDtRng, inMlSc, inMkt):
 		try:
@@ -28,12 +27,13 @@ class History():
 			self.ohlcList = []
 
 			while i < cnt:
+				ohlc1 = OHLC()
+				ohlc1.setOHLC(hstJson['o'][arrLen], hstJson['h'][arrLen], hstJson['l'][arrLen], hstJson['c'][arrLen])
+				self.ohlcList.append(ohlc1)
 
-				self.ohlc.setOHLC(hstJson['o'][arrLen], hstJson['h'][arrLen], hstJson['l'][arrLen], hstJson['c'][arrLen])
-				self.ohlcList.append(self.ohlc)
-
-				self.ohlc.setOHLC((self.ohlcAvrg.o + hstJson['o'][arrLen]), (self.ohlcAvrg.h + hstJson['h'][arrLen]), (self.ohlcAvrg.l + hstJson['l'][arrLen]), (self.ohlcAvrg.c + hstJson['c'][arrLen]))
-				self.ohlcAvrg = self.ohlc
+				ohlc2 = OHLC()
+				ohlc2.setOHLC((self.ohlcAvrg.o + hstJson['o'][arrLen]), (self.ohlcAvrg.h + hstJson['h'][arrLen]), (self.ohlcAvrg.l + hstJson['l'][arrLen]), (self.ohlcAvrg.c + hstJson['c'][arrLen]))
+				self.ohlcAvrg = ohlc2
 
 				arrLen += 1
 				i += 1
